@@ -1,33 +1,33 @@
 clc; clear; close all;
 
-%% // Problemin Tanımı
+%% // Problemin Tanimi
 
 Func='Rosenbrock'; % Amac Fonksiyonu
 
-NumVars = 5; % Karar Değişkenlerinin Boyutu
-Range = [-5,5]; % Karar Değişkenlerinin Alt Sinir ve Ust Sinir Araligi
+NumVars = 5; % Karar Degiskenlerinin Boyutu
+Range = [-5,5]; % Karar Degiskenlerinin Alt Sinir ve Ust Sinir Araligi
 
 %% Firefly Algoritmasi Parametreleri
 
-Pop = 25; % Ateşböceği Sayısı (Sürü Büyüklüğü)
-MaxIter = 500; % Maksimum İterasyon Sayısı
+Pop = 25; % AtesbÃ¶cegi Sayisi (SÃ¼rÃ¼ BÃ¼yÃ¼klÃ¼Ã°Ã¼)
+MaxIter = 500; % Maksimum Ãterasyon SayÃ½sÃ½
 
 % Cekicilik Denklem Girdileri
-Gamma = 1;   % Işık Soğurma Katsayısı (0.01 ve 100 arasında)
-Beta0 = 1;   % Cekicilik Katsayısı Baz Değeri
-Alpha = 0.2; % Mutasyon Katsayısı Rastlantı Değeri (0 ve 1 arasında)
+Gamma = 1;   % IÃ¾Ã½k SoÃ°urma KatsayÃ½sÃ½ (0.01 ve 100 arasÃ½nda)
+Beta0 = 1;   % Cekicilik KatsayÃ½sÃ½ Baz DeÃ°eri
+Alpha = 0.2; % Mutasyon KatsayÃ½sÃ½ RastlantÃ½ DeÃ°eri (0 ve 1 arasÃ½nda)
 m = 2;
 
-% Damping Değeri
-Damp = 0.99; % Mutasyon Katsayısı Sönümleme Oranı
+% Damping DeÃ°eri
+Damp = 0.99; % Mutasyon KatsayÃ½sÃ½ SÃ¶nÃ¼mleme OranÃ½
 
-%% FireFly Algoritmasını Bslngc
+%% FireFly AlgoritmasÃ½nÃ½ Bslngc
 
-% Ateşböceği Yapısı 
+% AteÃ¾bÃ¶ceÃ°i YapÃ½sÃ½ 
 S_FireFly.Position = []; % Firefly Konumu
 S_FireFly.Cost = []; % Firefly Cost Cozumu
 
-FireFly = repmat(S_FireFly,Pop,1); % Olusumu % Populasyon Dizisini Başlat
+FireFly = repmat(S_FireFly,Pop,1); % Olusumu % Populasyon Dizisini BaÃ¾lat
 
 BestFireFly.Cost = inf; % Eniyi Deger
 
@@ -40,10 +40,10 @@ for i = 1 :Pop
     end   
 end
 
-% En İyi Maliyet Değerlerine Sahip Dizi
+% En Ãyi Maliyet DeÃ°erlerine Sahip Dizi
 BestFireFlyCost = zeros(MaxIter, 1);
 
-%% Ateşböceği Algoritması Ana Döngüsü
+%% AteÃ¾bÃ¶ceÃ°i AlgoritmasÃ½ Ana DÃ¶ngÃ¼sÃ¼
 
 for Iter = 1 :MaxIter
 N_FireFly = FireFly;
@@ -56,11 +56,11 @@ N_FireFly = FireFly;
             Beta = Beta0*exp(-Gamma*Distance^m); % Cekicilik Degeri
           
             Ee = unifrnd(-0.5*(Range(2)-Range(1)),0.5*(Range(2)-Range(1))...
-                ,[1,NumVars]);  % Rastgele Sayımız (-0.5,+0.5)
+                ,[1,NumVars]);  % Rastgele SayÃ½mÃ½z (-0.5,+0.5)
           
             N_FireFly(i).Position = FireFly(i).Position + Beta...
                 * (FireFly(j).Position - FireFly(i).Position)...
-                + Alpha*Ee; % Ateş böceginin hareketi // yeni posizyonu
+                + Alpha*Ee; % AteÃ¾ bÃ¶ceginin hareketi // yeni posizyonu
           
             N_FireFly(i).Position = max(N_FireFly(i).Position,Range(1)); % max degeri  
             N_FireFly(i).Position = min(N_FireFly(i).Position,Range(2)); % min degeri    
@@ -82,16 +82,16 @@ N_FireFly = FireFly;
     FireFly = FireFly(SortOrder);
     FireFly = FireFly(1:Pop);
         
-    % Nemli Mutasyon Katsayısı
+    % Nemli Mutasyon KatsayÃ½sÃ½
     Alpha = Alpha * Damp;
-    % Şimdiye Kadarki En İyi Cozum Maliyeti
+    % Ãimdiye Kadarki En Ãyi Cozum Maliyeti
     BestFireFlyCost(Iter) = BestFireFly.Cost;
-    % Bilgilerini Gösterme
+    % Bilgilerini GÃ¶sterme
     disp(['Iterasyon:',num2str(Iter),' / Best=',num2str(BestFireFlyCost(Iter))]);
 
 end    
 
-%% Sonuclari Gösterme
+%% Sonuclari GÃ¶sterme
 figure;
 semilogy(BestFireFlyCost,'LineWidth',2);
 xlabel('Iter');
